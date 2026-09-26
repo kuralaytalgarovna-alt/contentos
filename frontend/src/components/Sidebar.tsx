@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import { DEMO_MODE } from "../demoMode";
 import { useThemeStore } from "../store/themeStore";
 
 const NAV_ITEMS = [
@@ -16,7 +17,18 @@ export function Sidebar() {
 
   return (
     <nav className="sidebar">
-      <div className="sidebar-logo">ContentOS</div>
+      <div className="sidebar-logo">
+        ContentOS
+        {DEMO_MODE && (
+          <span
+            className="badge"
+            style={{ marginLeft: 8, fontSize: 10, verticalAlign: "middle", background: "var(--color-accent)", color: "white" }}
+            title="Данные в этом демо хранятся только в памяти браузера и сбрасываются при перезагрузке страницы — backend не подключён."
+          >
+            ДЕМО
+          </span>
+        )}
+      </div>
       {NAV_ITEMS.map((item) => (
         <NavLink
           key={item.to}

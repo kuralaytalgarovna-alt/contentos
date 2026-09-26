@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { downloadReportPdf, getAnalyticsOverview } from "../api/analytics";
+import { DEMO_MODE } from "../demoMode";
 import { useProjectStore } from "../store/projectStore";
 import type { AnalyticsOverview } from "../types";
 
@@ -41,9 +42,16 @@ export function Analytics() {
     <div>
       <div className="page-header">
         <h1>Аналитика</h1>
-        <button className="btn" onClick={handleDownload} disabled={downloading}>
-          {downloading ? "Формируем…" : "Сформировать отчёт клиенту"}
-        </button>
+        <div style={{ textAlign: "right" }}>
+          <button className="btn" onClick={handleDownload} disabled={downloading}>
+            {downloading ? "Формируем…" : "Сформировать отчёт клиенту"}
+          </button>
+          {DEMO_MODE && (
+            <div className="muted" style={{ marginTop: 4, maxWidth: 260 }}>
+              В демо-режиме PDF не создаётся — нужен backend (см. README)
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="card" style={{ marginBottom: 16 }}>

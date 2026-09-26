@@ -1,6 +1,7 @@
 import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiClient } from "../api/client";
+import { DEMO_MODE } from "../demoMode";
 import { useAuthStore } from "../store/authStore";
 import { useProjectStore } from "../store/projectStore";
 
@@ -18,6 +19,11 @@ export function Profile() {
     e.preventDefault();
     if (!project) return;
     setInviteMessage(null);
+    if (DEMO_MODE) {
+      setInviteMessage(`В демо-режиме приглашения не отправляются. В полной версии ${inviteEmail} получил(а) бы роль «${inviteRole}».`);
+      setInviteEmail("");
+      return;
+    }
     try {
       await apiClient.post(`/projects/${project.id}/members`, { email: inviteEmail, role: inviteRole });
       setInviteMessage(`${inviteEmail} добавлен(а) в проект как ${inviteRole}`);
