@@ -1,0 +1,38 @@
+services:
+  - type: web
+    name: contentos-backend
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      # DATABASE_URL is left unset on purpose: it defaults to a local SQLite
+      # file, which is enough for a demo deploy. Render's free tier disk is
+      # ephemeral across deploys, so data resets whenever this service
+      # redeploys. Point DATABASE_URL at a managed Postgres instance to make
+      # it persistent.
+      # ANTHROPIC_API_KEY is left unset on purpose: idea/text generation
+      # falls back to the built-in mock generator without it.
+
+  - type: web
+    name: contentos-frontend
+    runtime: static
+    plan: free
+    rootDir: frontend
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: NPM_CONFIG_PRODUCTION
+        value: "false" # vite/typescript are devDependencies; force npm to install them
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: contentos-backend
+          property: host
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
