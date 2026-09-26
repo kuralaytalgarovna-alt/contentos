@@ -1,0 +1,17 @@
+# Backend
+backend/.venv/
+backend/contentos.db
+backend/.env
+backend/storage/media/*
+!backend/storage/media/.gitkeep
+__pycache__/
+*.pyc
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env.local
+
+# Editors / OS
+.vscode/
+.DS_Store

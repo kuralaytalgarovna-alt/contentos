@@ -1,0 +1,25 @@
+version: "3.9"
+
+# Not required for local development today — the backend defaults to a local
+# SQLite file with zero setup (see backend/.env.example). Bring this up once
+# Docker is installed, then set DATABASE_URL in backend/.env to the Postgres
+# DSN commented in that file to switch over.
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: contentos
+      POSTGRES_PASSWORD: contentos
+      POSTGRES_DB: contentos
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres_data:
