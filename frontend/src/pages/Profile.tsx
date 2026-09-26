@@ -53,11 +53,17 @@ export function Profile() {
           <button
             className="btn secondary"
             onClick={() => {
+              if (DEMO_MODE) {
+                // Demo mode auto-authenticates on load, so a real logout
+                // would just bounce back in — offer a full reset instead.
+                window.location.reload();
+                return;
+              }
               logout();
               navigate("/login");
             }}
           >
-            Выйти
+            {DEMO_MODE ? "Начать демо заново" : "Выйти"}
           </button>
         </div>
 
