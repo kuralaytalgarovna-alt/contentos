@@ -159,69 +159,71 @@ export function Calendar() {
         </div>
       )}
 
-      <div className="grid" style={{ gridTemplateColumns: "repeat(7, 1fr)", gap: 8 }}>
-        {WEEKDAY_LABELS.map((label) => (
-          <div key={label} className="muted" style={{ textAlign: "center" }}>
-            {label}
-          </div>
-        ))}
-        {days.map((day) => {
-          const key = toDateKey(day);
-          const dayPosts = postsByDay.get(key) ?? [];
-          const isCurrentMonth = day.getMonth() === monthReference.getMonth();
-          return (
-            <div
-              key={key}
-              className="card"
-              style={{
-                minHeight: 110,
-                padding: 8,
-                opacity: isCurrentMonth ? 1 : 0.4,
-                display: "flex",
-                flexDirection: "column",
-                gap: 6,
-              }}
-              onDragOver={(e) => e.preventDefault()}
-              onDrop={(e) => {
-                e.preventDefault();
-                const postId = e.dataTransfer.getData("text/plain");
-                void handleDrop(day, postId);
-              }}
-            >
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span className="muted">{day.getDate()}</span>
-                <button
-                  className="btn secondary"
-                  style={{ padding: "2px 6px", fontSize: 11 }}
-                  onClick={() => {
-                    setNewPostDate(day);
-                    setEditing("new");
-                  }}
-                >
-                  +
-                </button>
-              </div>
-              {dayPosts.map((post) => (
-                <div
-                  key={post.id}
-                  draggable
-                  onDragStart={(e) => e.dataTransfer.setData("text/plain", post.id)}
-                  onClick={() => setEditing(post)}
-                  style={{
-                    fontSize: 12,
-                    padding: "4px 6px",
-                    borderRadius: 6,
-                    background: "var(--color-bg)",
-                    cursor: "grab",
-                  }}
-                >
-                  <div>{post.title || post.platform}</div>
-                  <StatusBadge status={post.status} />
-                </div>
-              ))}
+      <div style={{ overflowX: "auto" }}>
+        <div className="grid" style={{ gridTemplateColumns: "repeat(7, 1fr)", gap: 8, minWidth: 700 }}>
+          {WEEKDAY_LABELS.map((label) => (
+            <div key={label} className="muted" style={{ textAlign: "center" }}>
+              {label}
             </div>
-          );
-        })}
+          ))}
+          {days.map((day) => {
+            const key = toDateKey(day);
+            const dayPosts = postsByDay.get(key) ?? [];
+            const isCurrentMonth = day.getMonth() === monthReference.getMonth();
+            return (
+              <div
+                key={key}
+                className="card"
+                style={{
+                  minHeight: 110,
+                  padding: 8,
+                  opacity: isCurrentMonth ? 1 : 0.4,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 6,
+                }}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  const postId = e.dataTransfer.getData("text/plain");
+                  void handleDrop(day, postId);
+                }}
+              >
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <span className="muted">{day.getDate()}</span>
+                  <button
+                    className="btn secondary"
+                    style={{ padding: "2px 6px", fontSize: 11 }}
+                    onClick={() => {
+                      setNewPostDate(day);
+                      setEditing("new");
+                    }}
+                  >
+                    +
+                  </button>
+                </div>
+                {dayPosts.map((post) => (
+                  <div
+                    key={post.id}
+                    draggable
+                    onDragStart={(e) => e.dataTransfer.setData("text/plain", post.id)}
+                    onClick={() => setEditing(post)}
+                    style={{
+                      fontSize: 12,
+                      padding: "4px 6px",
+                      borderRadius: 6,
+                      background: "var(--color-bg)",
+                      cursor: "grab",
+                    }}
+                  >
+                    <div>{post.title || post.platform}</div>
+                    <StatusBadge status={post.status} />
+                  </div>
+                ))}
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {editing && (

@@ -6,12 +6,14 @@ import { listProjects } from "../api/projects";
 import { fetchMe } from "../api/auth";
 import { useProjectStore } from "../store/projectStore";
 import { useAuthStore } from "../store/authStore";
+import { useUiStore } from "../store/uiStore";
 
 export function AppLayout() {
   const [loading, setLoading] = useState(true);
   const setProjects = useProjectStore((s) => s.setProjects);
   const projects = useProjectStore((s) => s.projects);
   const setUser = useAuthStore((s) => s.setUser);
+  const toggleSidebar = useUiStore((s) => s.toggleSidebar);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -48,6 +50,12 @@ export function AppLayout() {
 
   return (
     <div className="app-shell">
+      <div className="mobile-topbar">
+        <button onClick={toggleSidebar} aria-label="Открыть меню">
+          ☰
+        </button>
+        <div className="sidebar-logo">ContentOS</div>
+      </div>
       <Sidebar />
       <div className="main-content">
         {projects.length > 0 && (
